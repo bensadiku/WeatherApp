@@ -12,6 +12,6 @@ class FutureListWeatherViewModelFactory (
 ): ViewModelProvider.NewInstanceFactory(){
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return CurrentWeatherViewModel(forecastRepository,unitProvider)as T
+        return FutureListWeatherViewModel(forecastRepository,unitProvider)as T
     }
 }
