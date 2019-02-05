@@ -27,6 +27,7 @@ interface ApixuWeatherApiService {
     @GET("forecast.json")
     fun getFutureWeather(
         @Query("q") location: String,
+        @Query("days") days: Int,
         @Query("lang") languageCode: String = "en"
     ): Deferred<FutureWeatherResponse>
 
