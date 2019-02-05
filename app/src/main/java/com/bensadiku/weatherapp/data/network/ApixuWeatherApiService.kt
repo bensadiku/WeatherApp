@@ -13,7 +13,7 @@ import retrofit2.http.Query
 
 const val API_KEY = "5d2e22f555f444de8f700935190502"
 
-//http://api.apixu.com/v1/current.json?key=5d2e22f555f444de8f700935190502&q=pristine&Lang=en
+//http://api.apixu.com/v1/current.json?key=5d2e22f555f444de8f700935190502&q=pristina&Lang=en
 
 interface ApixuWeatherApiService {
 
@@ -23,17 +23,18 @@ interface ApixuWeatherApiService {
         @Query("lang") languageCode: String = "en"
     ): Deferred<CurrentWeatherResponse>
 
+    //http://api.apixu.com/v1/forecast.json?key=5d2e22f555f444de8f700935190502&q=pristina&days=1
     @GET("forecast.json")
     fun getFutureWeather(
         @Query("q") location: String,
-        @Query("lang") languageCode: String="en"
-    ):Deferred<FutureWeatherResponse>
+        @Query("lang") languageCode: String = "en"
+    ): Deferred<FutureWeatherResponse>
 
     companion object {
-        operator  fun invoke(
+        operator fun invoke(
             connectivityInterceptor: ConnectivityInterceptor
         ): ApixuWeatherApiService {
-            val requestInterceptor = Interceptor{chain ->
+            val requestInterceptor = Interceptor { chain ->
                 val url = chain.request()
                     .url()
                     .newBuilder()
@@ -48,7 +49,7 @@ interface ApixuWeatherApiService {
                 return@Interceptor chain.proceed(request)
             }
 
-            val okHttpClient= OkHttpClient.Builder()
+            val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(requestInterceptor)
                 .addInterceptor(connectivityInterceptor)
                 .build()
