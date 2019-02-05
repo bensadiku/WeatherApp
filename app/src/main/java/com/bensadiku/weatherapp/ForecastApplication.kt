@@ -3,6 +3,8 @@ package com.bensadiku.weatherapp
 import android.app.Application
 import com.bensadiku.weatherapp.data.db.ForecastDatabase
 import com.bensadiku.weatherapp.data.network.*
+import com.bensadiku.weatherapp.data.provider.UnitProvider
+import com.bensadiku.weatherapp.data.provider.UnitProviderImpl
 import com.bensadiku.weatherapp.data.repository.ForecastRepository
 import com.bensadiku.weatherapp.data.repository.ForecastRepositoryImpl
 import com.bensadiku.weatherapp.ui.weather.current.CurrentWeatherViewModelFactory
@@ -27,8 +29,8 @@ class ForecastApplication : Application(), KodeinAware{
         bind<WeatherNetworkDataSource>() with singleton { WeatherNetworkDataSourceImpl(instance()) }
 
         bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(),instance()) }
-
-        bind() from provider { CurrentWeatherViewModelFactory (instance()) }
+        bind<UnitProvider>() with  singleton { UnitProviderImpl(instance()) }
+        bind() from provider { CurrentWeatherViewModelFactory (instance(),instance()) }
     }
 
 
