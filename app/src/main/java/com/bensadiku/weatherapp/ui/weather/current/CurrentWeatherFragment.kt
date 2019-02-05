@@ -13,6 +13,7 @@ import com.bensadiku.weatherapp.data.network.ApixuWeatherApiService
 import com.bensadiku.weatherapp.data.network.ConnectivityInterceptor
 import com.bensadiku.weatherapp.data.network.ConnectivityInterceptorImpl
 import com.bensadiku.weatherapp.data.network.WeatherNetworkDataSourceImpl
+import com.bensadiku.weatherapp.ui.base.ScopedFragment
 import kotlinx.android.synthetic.main.current_weather_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -22,7 +23,8 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
 
-class CurrentWeatherFragment : Fragment(),KodeinAware {
+class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
+
     override val kodein by closestKodein()
 
     private val viewModelFactory: CurrentWeatherViewModelFactory by instance()
@@ -42,10 +44,10 @@ class CurrentWeatherFragment : Fragment(),KodeinAware {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this,viewModelFactory)
+        viewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(CurrentWeatherViewModel::class.java)
 
-
+        bindUI()
 //
 //        val apiService = ApixuWeatherApiService(ConnectivityInterceptorImpl(this.context!!))
 //        val weatherNetweorkDataSource = WeatherNetworkDataSourceImpl(apiService)
@@ -56,5 +58,11 @@ class CurrentWeatherFragment : Fragment(),KodeinAware {
 //        GlobalScope.launch (Dispatchers.Main){
 //            weatherNetweorkDataSource.fetchCurrentWeather("Pristine","en")
 //        }
+
+
+    }
+
+    private fun bindUI() = launch {
+        val currentWeather = viewModel.weather.await()
     }
 }
