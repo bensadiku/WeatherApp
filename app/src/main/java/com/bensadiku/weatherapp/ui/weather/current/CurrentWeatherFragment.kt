@@ -48,21 +48,13 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
             .get(CurrentWeatherViewModel::class.java)
 
         bindUI()
-//
-//        val apiService = ApixuWeatherApiService(ConnectivityInterceptorImpl(this.context!!))
-//        val weatherNetweorkDataSource = WeatherNetworkDataSourceImpl(apiService)
-//        weatherNetweorkDataSource.downloadedCurrentWeather.observe(this, Observer {
-//            textView.text=  it.toString()
-//        })
-//
-//        GlobalScope.launch (Dispatchers.Main){
-//            weatherNetweorkDataSource.fetchCurrentWeather("Pristine","en")
-//        }
-
-
     }
 
     private fun bindUI() = launch {
         val currentWeather = viewModel.weather.await()
+        currentWeather.observe(this@CurrentWeatherFragment, Observer {
+           if(it==null) return@Observer
+            textView.text = it.toString()
+        })
     }
 }
