@@ -1,11 +1,10 @@
 package com.bensadiku.weatherapp.data.repository
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
 import com.bensadiku.weatherapp.data.db.CurrentWeatherDao
 import com.bensadiku.weatherapp.data.db.WeatherLocationDao
 import com.bensadiku.weatherapp.data.db.entity.WeatherLocation
-import com.bensadiku.weatherapp.data.db.unitlocalized.UnitSpecificCurrentWeatherEntry
+import com.bensadiku.weatherapp.data.db.unitlocalized.current.UnitSpecificCurrentWeatherEntry
 import com.bensadiku.weatherapp.data.network.WeatherNetworkDataSource
 import com.bensadiku.weatherapp.data.network.response.CurrentWeatherResponse
 import com.bensadiku.weatherapp.data.provider.LocationProvider

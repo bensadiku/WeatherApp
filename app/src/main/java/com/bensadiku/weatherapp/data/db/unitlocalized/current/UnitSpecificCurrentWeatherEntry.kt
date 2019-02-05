@@ -1,4 +1,4 @@
-package com.bensadiku.weatherapp.data.db.unitlocalized
+package com.bensadiku.weatherapp.data.db.unitlocalized.current
 
 
 interface UnitSpecificCurrentWeatherEntry {

@@ -2,7 +2,7 @@ package com.bensadiku.weatherapp.data.repository
 
 import androidx.lifecycle.LiveData
 import com.bensadiku.weatherapp.data.db.entity.WeatherLocation
-import com.bensadiku.weatherapp.data.db.unitlocalized.UnitSpecificCurrentWeatherEntry
+import com.bensadiku.weatherapp.data.db.unitlocalized.current.UnitSpecificCurrentWeatherEntry
 
 interface ForecastRepository {
 
