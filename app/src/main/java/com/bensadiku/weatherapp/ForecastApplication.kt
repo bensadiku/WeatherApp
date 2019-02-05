@@ -5,12 +5,14 @@ import com.bensadiku.weatherapp.data.db.ForecastDatabase
 import com.bensadiku.weatherapp.data.network.*
 import com.bensadiku.weatherapp.data.repository.ForecastRepository
 import com.bensadiku.weatherapp.data.repository.ForecastRepositoryImpl
+import com.bensadiku.weatherapp.ui.weather.current.CurrentWeatherViewModelFactory
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
 import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
+import org.kodein.di.generic.provider
 import org.kodein.di.generic.singleton
 
 class ForecastApplication : Application(), KodeinAware{
@@ -26,6 +28,7 @@ class ForecastApplication : Application(), KodeinAware{
 
         bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(),instance()) }
 
+        bind() from provider { CurrentWeatherViewModelFactory (instance()) }
     }
 
 
