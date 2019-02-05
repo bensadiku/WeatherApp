@@ -3,6 +3,8 @@ package com.bensadiku.weatherapp.data.repository
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import com.bensadiku.weatherapp.data.db.CurrentWeatherDao
+import com.bensadiku.weatherapp.data.db.WeatherLocationDao
+import com.bensadiku.weatherapp.data.db.entity.WeatherLocation
 import com.bensadiku.weatherapp.data.db.unitlocalized.UnitSpecificCurrentWeatherEntry
 import com.bensadiku.weatherapp.data.network.WeatherNetworkDataSource
 import com.bensadiku.weatherapp.data.network.response.CurrentWeatherResponse
@@ -15,8 +17,11 @@ import java.util.*
 
 class ForecastRepositoryImpl(
     private val currentWeatherDao: CurrentWeatherDao,
+    private val weatherLocationDao: WeatherLocationDao,
     private val weatherNetworkDataSource: WeatherNetworkDataSource
 ) : ForecastRepository {
+
+
 
     init {
         weatherNetworkDataSource.downloadedCurrentWeather.observeForever {
@@ -33,9 +38,16 @@ class ForecastRepositoryImpl(
         }
     }
 
+    override suspend fun getWeatherLocation(): LiveData<WeatherLocation> {
+        return withContext(Dispatchers.IO){
+            return@withContext weatherLocationDao.getLocation()
+        }
+    }
+
     private  fun persistFetchedCurrentWeather (fetchedWeather:CurrentWeatherResponse){
         GlobalScope.launch(Dispatchers.IO) {
             currentWeatherDao.upsert(fetchedWeather.currentWeatherEntry)
+          weatherLocationDao.upsert(fetchedWeather.location)
         }
     }
 
