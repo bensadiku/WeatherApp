@@ -12,6 +12,7 @@ import com.bensadiku.weatherapp.data.provider.UnitProviderImpl
 import com.bensadiku.weatherapp.data.repository.ForecastRepository
 import com.bensadiku.weatherapp.data.repository.ForecastRepositoryImpl
 import com.bensadiku.weatherapp.ui.weather.current.CurrentWeatherViewModelFactory
+import com.bensadiku.weatherapp.ui.weather.future.list.FutureListWeatherViewModelFactory
 import com.google.android.gms.location.LocationServices
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.kodein.di.Kodein
@@ -22,29 +23,39 @@ import org.kodein.di.generic.instance
 import org.kodein.di.generic.provider
 import org.kodein.di.generic.singleton
 
-class ForecastApplication : Application(), KodeinAware{
+class ForecastApplication : Application(), KodeinAware {
     override val kodein = Kodein.lazy {
         import(androidXModule(this@ForecastApplication))
 
-        bind()from singleton { ForecastDatabase(instance()) }
-        bind()from singleton { instance<ForecastDatabase>().currentWeatherDao() }
-        bind()from singleton { instance<ForecastDatabase>().weatherLocationDao() }
+        bind() from singleton { ForecastDatabase(instance()) }
+        bind() from singleton { instance<ForecastDatabase>().currentWeatherDao() }
+        bind() from singleton { instance<ForecastDatabase>().futureWeatherDao() }
+        bind() from singleton { instance<ForecastDatabase>().weatherLocationDao() }
         bind<ConnectivityInterceptor>() with singleton { ConnectivityInterceptorImpl(instance()) }
 
-        bind()from singleton { ApixuWeatherApiService(instance()) }
+        bind() from singleton { ApixuWeatherApiService(instance()) }
         bind<WeatherNetworkDataSource>() with singleton { WeatherNetworkDataSourceImpl(instance()) }
-        bind()from provider { LocationServices.getFusedLocationProviderClient(instance<Context>()) }
-        bind<LocationProvider>() with  singleton { LocationProviderImpl(instance(),instance()) }
-        bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(),instance(),instance(),instance()) }
-        bind<UnitProvider>() with  singleton { UnitProviderImpl(instance()) }
-        bind() from provider { CurrentWeatherViewModelFactory (instance(),instance()) }
+        bind() from provider { LocationServices.getFusedLocationProviderClient(instance<Context>()) }
+        bind<LocationProvider>() with singleton { LocationProviderImpl(instance(), instance()) }
+        bind<ForecastRepository>() with singleton {
+            ForecastRepositoryImpl(
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance()
+            )
+        }
+        bind<UnitProvider>() with singleton { UnitProviderImpl(instance()) }
+        bind() from provider { CurrentWeatherViewModelFactory(instance(), instance()) }
+        bind() from provider { FutureListWeatherViewModelFactory(instance(), instance()) }
     }
 
 
     override fun onCreate() {
         super.onCreate()
         AndroidThreeTen.init(this)
-        PreferenceManager.setDefaultValues(this,R.xml.pereferences,false)
+        PreferenceManager.setDefaultValues(this, R.xml.pereferences, false)
     }
 
 }
