@@ -1,8 +1,11 @@
 package com.bensadiku.weatherapp
 
 import android.app.Application
+import androidx.preference.PreferenceManager
 import com.bensadiku.weatherapp.data.db.ForecastDatabase
 import com.bensadiku.weatherapp.data.network.*
+import com.bensadiku.weatherapp.data.provider.LocationProvider
+import com.bensadiku.weatherapp.data.provider.LocationProviderImpl
 import com.bensadiku.weatherapp.data.provider.UnitProvider
 import com.bensadiku.weatherapp.data.provider.UnitProviderImpl
 import com.bensadiku.weatherapp.data.repository.ForecastRepository
@@ -23,12 +26,14 @@ class ForecastApplication : Application(), KodeinAware{
 
         bind()from singleton { ForecastDatabase(instance()) }
         bind()from singleton { instance<ForecastDatabase>().currentWeatherDao() }
+        bind()from singleton { instance<ForecastDatabase>().weatherLocationDao() }
         bind<ConnectivityInterceptor>() with singleton { ConnectivityInterceptorImpl(instance()) }
 
         bind()from singleton { ApixuWeatherApiService(instance()) }
         bind<WeatherNetworkDataSource>() with singleton { WeatherNetworkDataSourceImpl(instance()) }
+        bind<LocationProvider>() with  singleton { LocationProviderImpl() }
 
-        bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(),instance()) }
+        bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(),instance(),instance(),instance()) }
         bind<UnitProvider>() with  singleton { UnitProviderImpl(instance()) }
         bind() from provider { CurrentWeatherViewModelFactory (instance(),instance()) }
     }
@@ -37,6 +42,7 @@ class ForecastApplication : Application(), KodeinAware{
     override fun onCreate() {
         super.onCreate()
         AndroidThreeTen.init(this)
+        PreferenceManager.setDefaultValues(this,R.xml.pereferences,false)
     }
 
 }
