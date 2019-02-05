@@ -1,25 +1,19 @@
 package com.bensadiku.weatherapp.ui.weather.current
 
-import androidx.lifecycle.ViewModel;
 import com.bensadiku.weatherapp.data.provider.UnitProvider
 import com.bensadiku.weatherapp.data.repository.ForecastRepository
-import com.bensadiku.weatherapp.internal.UnitSystem
 import com.bensadiku.weatherapp.internal.lazyDeferred
+import com.bensadiku.weatherapp.ui.base.WeatherViewModel
 
 class CurrentWeatherViewModel(
     private val forecastRepository: ForecastRepository,
     unitProvider: UnitProvider
-) : ViewModel() {
-    private val unitSystem = unitProvider.getUnitSystem()
+) : WeatherViewModel(forecastRepository,unitProvider) {
 
-    val isMetric: Boolean
-        get() = unitSystem == UnitSystem.METRIC
 
     val weather by lazyDeferred() {
-        forecastRepository.getCurrentWeather(isMetric)
+        forecastRepository.getCurrentWeather(super.isMetricUnit)
     }
 
-    val weatherLocation by lazyDeferred(){
-        forecastRepository.getWeatherLocation()
-    }
+
 }
