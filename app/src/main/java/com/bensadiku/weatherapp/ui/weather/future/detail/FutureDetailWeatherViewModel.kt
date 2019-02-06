@@ -14,7 +14,7 @@ class FutureDetailWeatherViewModel(
     unitProvider: UnitProvider
 ) : WeatherViewModel(forecastRepository, unitProvider) {
 
-    val weatherEntries by lazyDeferred {
+    val weather by lazyDeferred {
         forecastRepository.getFutureWeatherByDate(detailDate, super.isMetricUnit)
     }
 }
