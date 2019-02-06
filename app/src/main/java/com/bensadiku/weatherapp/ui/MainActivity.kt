@@ -11,6 +11,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
+import com.bensadiku.rectoast.ToastRect
 import com.bensadiku.weatherapp.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -79,7 +80,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 bindLocationManager()
             else
-                Toast.makeText(this, "Please, set location manually in settings", Toast.LENGTH_LONG).show()
+                ToastRect.warning(this,"Please set location manually in settings",Toast.LENGTH_LONG)
         }
     }
 
